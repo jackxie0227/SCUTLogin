@@ -1,0 +1,9 @@
+# 忽略 Python 的缓存文件  
+__pycache__/  
+
+# 忽略 PyInstaller 生成的文件夹  
+build/  
+dist/  
+
+# 忽略 PyInstaller 生成的 spec 文件  
+SCUTLogin.spec
