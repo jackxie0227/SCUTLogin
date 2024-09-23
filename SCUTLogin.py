@@ -1,3 +1,4 @@
+# by jackxie
 # 获取 url 登录信息
 from Prepare import prepare
 account, password, wlan_user_ip, wlan_ac_ip = prepare()
