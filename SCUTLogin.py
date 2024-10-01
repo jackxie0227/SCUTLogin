@@ -22,6 +22,19 @@ finally:
     driver.quit()
 
 
+import requests
+def test_network():  
+    try:  
+        response = requests.get('https://www.baidu.com', timeout=5)  
+        if response.status_code == 200:  
+            print('网络连接正常。')  
+        else:  
+            print(f'网络连接异常，状态码：{response.status_code}')  
+    except requests.exceptions.RequestException as e:  
+        print(f'网络连接异常：{e}')  
+
+# 在登录成功后调用测试函数  
+test_network()
 
 # 登录 url https://s2.scut.edu.cn:802/eportal/portal/login?callback=dr1003&login_method=1&user_account=202421017176&user_password=02273513&wlan_user_ip=10.197.216.243&wlan_user_ipv6=&wlan_user_mac=000000000000&wlan_ac_ip=&wlan_ac_name=&jsVersion=4.1.3&terminal_type=1&lang=zh-cn&v=5860&lang=zh
 # 注销网站：https://s2.scut.edu.cn/
