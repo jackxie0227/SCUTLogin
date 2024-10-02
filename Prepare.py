@@ -107,6 +107,8 @@ def prepare():
     else:
         print("正在连接至 scut-student")
         connect_student_scut()
+        
+    
     
     # 检查是否存在凭据文件
     if os.path.exists(credentials_file):
@@ -118,6 +120,9 @@ def prepare():
         print("已加载账户信息: ")
         print(f"账户名   : {account}")
         print(f"密码     : {password}")
+        
+        # 重新单独获取用户地址（可能会变）
+        wlan_user_ip, _ = get_ip()
     else:
         root = tk.Tk()
         root.withdraw() # 隐藏主窗口
