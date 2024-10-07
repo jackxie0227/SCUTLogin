@@ -77,23 +77,28 @@ def is_connectted_student_scut():
     except Exception as e:
         print(f"检测 WI-FI 连接时出错: {e}")
         return False
-def connect_student_scut():
-    try:
-        # 搜索可用的 WI-FI 网络
-        result = subprocess.run(['netsh', 'wlan', 'show', 'network'], capture_output=True, text=True)  
+import subprocess  
+def connect_student_scut():  
+    # 搜索可用的 WI-FI 网络  
+    result = subprocess.run(['netsh', 'wlan', 'show', 'network'], capture_output=True, text=True)  
+    
+    if "scut-student" in result.stdout:  
+        connect_result = subprocess.run(['netsh', 'wlan', 'connect', 'name=scut-student'], capture_output=True, text=True)  
         
-        if "scut-student" in result.stdout:  
-            print("找到 'scut-student' Wi-Fi, 正在连接...")  
-            
-            connect_result = subprocess.run(['netsh', 'wlan', 'connect', 'name=scut-student'], capture_output=True, text=True)  
+        if "成功" in connect_result.stdout:  
+            print("成功连接到 'scut-student' Wi-Fi。")  
+        else: # 找到网络连接失败 --- 缺失配置文件
+            config_file = 'scut-students-login/scut-student.xml'
+            add_result = subprocess.run(['netsh', 'wlan', 'add', 'profile', 'filename=' + config_file], capture_output=True, text=True)
+            if not "已将" in add_result.stdout:
+                raise ConnectionError("配置文件缺失或格式错误")
+            connect_result = subprocess.run(['netsh', 'wlan', 'connect', 'name=scut-student'], capture_output=True, text=True)
             if "成功" in connect_result.stdout:  
                 print("成功连接到 'scut-student' Wi-Fi。")  
-            else:  
-                print("连接 'scut-student' Wi-Fi 失败。")  
-        else:  
-            print("未找到 'scut-student' Wi-Fi。")
-    except Exception as e:  
-        print(f"连接Wi-Fi时出错: {e}")
+            else:
+                raise ConnectionError("未知问题导致的网络连接失败")
+    else:  
+        raise ConnectionError("未找到网络 'scut-student'") 
 
 # 主程序
 def prepare():
@@ -117,9 +122,8 @@ def prepare():
             password = f.readline().strip()
             wlan_user_ip = f.readline().strip()
             wlan_ac_ip = f.readline().strip()
-        print("已加载账户信息: ")
-        print(f"账户名   : {account}")
-        print(f"密码     : {password}")
+        print("已加载账户信息 ")
+        
         
         # 重新单独获取用户地址（可能会变）
         wlan_user_ip, _ = get_ip()
@@ -139,10 +143,12 @@ def prepare():
         # 保存用户信息
         create_credentials_file(folder_name, account, password, wlan_user_ip, wlan_ac_ip)
         print('账户信息已保存')
-        print(f"账户名 : {account}")
-        print(f"密码   : {password}")
+    print(f"账户名   : {account}")
+    print(f"密码     : {password}")
+    print(f"本地ip   : {wlan_user_ip}")
+    print(f"服务器ip : {wlan_ac_ip}")
         
     return account, password, wlan_user_ip, wlan_ac_ip
         
-if __name__ == "__main__":  # 检查当前模块是否为主程序  
-    prepare()  # 调用主程序函数      
+if __name__ == "__main__":  
+    connect_student_scut()

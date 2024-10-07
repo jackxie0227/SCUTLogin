@@ -7,3 +7,5 @@ dist/
 
 # 忽略 PyInstaller 生成的 spec 文件  
 SCUTLogin.spec
+
+test.py
