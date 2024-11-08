@@ -1,7 +1,7 @@
 import os
 import subprocess
 
-src_name = 'SCUTLogin.py'
+src_name = 'SCUTLogin_click.py'
 
 if os.path.isfile(src_name):
     subprocess.run(['pyinstaller','--onefile',src_name])

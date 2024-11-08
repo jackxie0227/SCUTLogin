@@ -1,6 +1,5 @@
 import os 
 import tkinter as tk
-from tkinter import simpledialog
 from tkinter import messagebox
 
 
@@ -59,6 +58,7 @@ def get_ip():
     hostname = socket.gethostname()  
     wlan_user_ip = socket.gethostbyname(hostname)  
     wlan_ac_ip = "192.168.53.174"
+    print(f"重新获取用户ip为:{wlan_user_ip}")
     return wlan_user_ip, wlan_ac_ip
 
 
@@ -100,6 +100,7 @@ def connect_student_scut():
     else:  
         raise ConnectionError("未找到网络 'scut-student'") 
 
+import time 
 # 主程序
 def prepare():
     # 检查驱动文件是否存在
@@ -113,14 +114,14 @@ def prepare():
         print("正在连接至 scut-student")
         connect_student_scut()
         
-    
+    time.sleep(0.3)
     
     # 检查是否存在凭据文件
     if os.path.exists(credentials_file):
         with open(credentials_file, 'r') as f:
             account = f.readline().strip()
             password = f.readline().strip()
-            wlan_user_ip = f.readline().strip()
+            _ = f.readline().strip()
             wlan_ac_ip = f.readline().strip()
         print("已加载账户信息 ")
         
