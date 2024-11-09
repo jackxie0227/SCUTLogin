@@ -29,6 +29,7 @@ def py_click():
         username_input.send_keys(account)
     except:
         print('您已成功登录或网页有误')
+        driver.quit()
         return
 
     # 输入密码
